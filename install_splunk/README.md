@@ -1,7 +1,7 @@
-Role Name
+install_splunk
 =========
 
-Install Splunk
+A simple role to pull a tgz of an official splunk image and install
 
 Requirements
 ------------
