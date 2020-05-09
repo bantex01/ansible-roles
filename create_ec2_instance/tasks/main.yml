@@ -1,0 +1,42 @@
+---
+# tasks file for create_ec2_instance
+- name: "Ansible | Print a variable"
+  debug:
+    msg: "The tag var is {{ aws_tags }}"
+- name: Launch a new ec2 instance
+  ec2:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ region }}"
+    instance_type: "{{ instance_type }}"
+    group: "{{ lab_sg.group_name }}"
+    id: "lab-host-{{ lab_id }}"
+    vpc_subnet_id: "{{ lab_subnet.subnet.id }}" 
+    assign_public_ip: yes
+    image: "{{ image }}"
+    keypair: "{{ keypair }}"
+    wait: true
+    state: present 
+    instance_tags: "{{ aws_tags }}"
+    count: "{{count}}"
+  register: ec2
+
+- name: "Ansible | List all known variables and facts"
+  debug:
+    var: hostvars[inventory_hostname]
+
+#- name: "Ansible | Print a variable"
+#  debug:
+#    msg: "The ec2 vars are {{ ec2 }}"
+
+- name: Tag the instance
+  ec2_tag:
+    region: "{{ region }}"
+    resource: "{{ ec2.instance_ids[0] }}"
+    state: present
+    tags: "{{ aws_tags }}"
+
+- name: "Ansible | List all known variables and facts"
+  debug:
+    var: hostvars[inventory_hostname]
+
