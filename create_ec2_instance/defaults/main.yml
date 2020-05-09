@@ -1,0 +1,4 @@
+---
+# defaults file for create_lab_network
+region: us-east-1
+keypair: ansible

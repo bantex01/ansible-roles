@@ -1,0 +1,80 @@
+---
+# tasks file for install_splunk
+
+- block:
+  - name: Check to see if splunk is already installed
+    stat:
+      path: "{{ splunk_path }}/splunk/bin/splunk" 
+    register: splunk_installed
+
+- block:
+  - name: Splunk not found - gathering splunk image
+    get_url:
+      url: "{{ splunk_url }}"
+      dest: /tmp/splunk_image.tgz
+  
+  - name: Create "{{ splunk_path }}" if it doesn't exist
+    file:
+      path: "{{ splunk_path }}"
+      state: directory 
+
+  - name: Create group "{{ splunk_run_as_user_group }}" 
+    group:
+      name: "{{ splunk_run_as_user_group }}"
+      state: present
+
+  - name: Create splunk user "{{ splunk_run_as_user }}"
+    user:
+      name: "{{ splunk_run_as_user }}"
+      group: "{{ splunk_run_as_user_group }}"
+
+  - name: Unzip splunk image into "{{ splunk_path }}"
+    unarchive:
+      src: /tmp/splunk_image.tgz
+      dest: "{{splunk_path }}"
+      remote_src: yes
+      owner: "{{ splunk_run_as_user }}"
+      group: "{{ splunk_run_as_user_group }}"
+      mode: "0755" 
+
+  - name: Creating seed file 
+    template:
+      src: user-seed.conf.j2
+      dest: "{{ splunk_path }}/splunk/etc/system/local/user-seed.conf"
+      owner:  "{{ splunk_run_as_user }}"
+      group: "{{ splunk_run_as_user_group }}"
+      mode: "0755"
+
+  - name: Start splunk and accept license
+    command: "{{ splunk_path }}/splunk/bin/splunk start --accept-license --answer-yes --no-prompt" 
+    become: yes
+    become_user: "{{ splunk_run_as_user }}"
+
+  - name: Stop splunk ready for systemd config
+    command:  "{{ splunk_path }}/splunk/bin/splunk stop"
+    become: yes
+    become_user: "{{ splunk_run_as_user }}"
+
+  - name: Run enable boot start command
+    command: "{{ splunk_path }}/splunk/bin/splunk enable boot-start -systemd-managed 1 -user {{ splunk_run_as_user }}"
+
+  - name: Start splunk in traditional way - this will use systemd
+    command: "{{ splunk_path }}/splunk/bin/splunk start"
+
+  - name: Test systemd script - start
+    systemd:
+      state: started
+      name: Splunkd 
+
+  when:
+    splunk_installed.stat.exists == False
+
+- block:
+  - name: Splunk installed
+    debug:
+      msg: "Debug and exit splunk installed"
+ 
+  when: 
+    splunk_installed.stat.exists == True 
+
+

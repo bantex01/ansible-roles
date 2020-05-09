@@ -1,0 +1,5 @@
+---
+# defaults file for create_lab_network
+security_group_name: lab-sg
+region: us-east-1
+keypair: ansible

@@ -1,0 +1,93 @@
+---
+# tasks file for create_lab_network
+
+- name: Create the lab VPC
+  ec2_vpc_net:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    name: lab-vpc 
+    cidr_block: 10.0.0.0/16
+    tenancy: default
+  register: create_vpc
+
+#- name: Checking VPC ID
+#  debug:
+#    msg: "{{create_vpc.vpc.id }}"
+
+- name: "Ansible | List all known variables and facts"
+  debug:
+    var: hostvars[inventory_hostname]
+
+- name: Create a simple SG to apply
+  ec2_group:
+    vpc_id: "{{ create_vpc.vpc.id }}"
+    region: "{{ region }}"
+    name: "{{ security_group_name }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    description: "Simple Lab SG"
+    tags:
+      Name: lab 
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 8000
+        to_port: 8000
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 8089
+        to_port: 8089
+        cidr_ip: 0.0.0.0/0
+
+    rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0
+  register: lab_sg
+
+- name: Create subnet for VPC
+  ec2_vpc_subnet:
+    state: present
+    vpc_id: "{{ create_vpc.vpc.id }}"
+    cidr: 10.0.1.0/24
+    tags:
+      Name: lab
+  register: lab_subnet
+    
+- name: Create an IGW
+  ec2_vpc_igw:
+    vpc_id: "{{ create_vpc.vpc.id }}"
+    state: present
+    tags:
+      Name: lab
+  register: lab_igw
+
+- name: "Ansible | List all known variables and facts for igw"
+  debug:
+    var: hostvars[inventory_hostname]
+
+
+- name: Create route table
+  ec2_vpc_route_table:
+    vpc_id: "{{ create_vpc.vpc.id }}"
+    region: "{{ region }}"
+    tags:
+      Name: lab
+    subnets:
+      - "{{ lab_subnet.subnet.id }}"
+    routes:
+      - dest: 0.0.0.0/0
+        gateway_id: "{{ lab_igw.gateway_id }}"
+  register: public_rt 
+
+
