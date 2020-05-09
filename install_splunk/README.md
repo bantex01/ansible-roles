@@ -16,7 +16,7 @@ The following variables are required and supplied in defaults (as below)
 The URL of the wget splunk image page
 splunk_url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.3&product=splunk&filename=splunk-8.0.3-a6754d8441bf-Linux-x86_64.tgz&wget=true
 
-Splunk will be installed to this path/splunk - so /opt means install to /opt/splunk
+Splunk will be installed to this path + /splunk - so /opt means install to /opt/splunk
 splunk_path: /opt
 
 The splunk admin user
