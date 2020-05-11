@@ -1,0 +1,35 @@
+---
+# tasks file for install_splunk_app
+
+- name: Create ansible src directory if doesn't exist
+  file: 
+    path: "/ansible/src/{{ item }}"
+    #state: directory
+    #mode: '0775'
+    state: absent
+  with_items:
+    "{{ app }}"
+
+- name: Pull image from github repo
+  git:
+    repo: git@github.com:bantex01/{{ item }}.git 
+    dest: "/ansible/src/{{ item }}"
+  with_items:
+    "{{ app }}"
+
+- name: Remove git references ready for tar
+  file:
+    path: /ansible/src/{{ item }}/.git
+    state: absent
+  with_items:
+    "{{ app }}"
+
+- name: Create archive ready for splunk install
+  archive:
+    path: /ansible/src/{{ item }}/
+    dest: /ansible/{{ item }}.tar.gz
+    exclude_path: /.git
+    format: gz
+  with_items:
+    "{{ app }}"
+
