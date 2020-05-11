@@ -1,4 +1,4 @@
-Role Name
+prepare_splunk_app_for_install
 =========
 
 A small role to prepare a splunk git artifact in readiness for copying to an ansible managed host. This role is only intended for my own personal use.  
