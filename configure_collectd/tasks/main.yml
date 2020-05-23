@@ -1,0 +1,17 @@
+---
+# tasks file for configure_collectd
+- name: Ensure selinux allows collectd metrics send to graphite
+  command: setsebool -P collectd_tcp_network_connect 1
+
+- name: Rename orig collectd.conf
+  command: mv /etc/collectd.conf /etc/collectd.conf.orig
+
+- name: Push collectd.conf template
+  template:
+    src: collectd.conf
+    dest: /etc/collectd.conf
+    owner: root
+    group: root
+    mode: 0775
+
+  notify: Restart collectd 

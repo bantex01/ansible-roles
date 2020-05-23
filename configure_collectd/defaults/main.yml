@@ -1,0 +1,4 @@
+---
+# defaults file for configure_collectd
+graphite_host: adalton2
+graphite_port: 2003

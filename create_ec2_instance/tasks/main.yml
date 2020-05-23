@@ -18,6 +18,7 @@
     wait: true
     state: present 
     instance_tags: "{{ aws_tags }}"
+    volumes: "{{ volumes }}"
     count: "{{count}}"
   register: ec2
 
