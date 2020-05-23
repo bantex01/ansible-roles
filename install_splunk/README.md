@@ -1,38 +1,38 @@
-Role Name
+install_splunk
 =========
 
-A brief description of the role goes here.
+A simple role to pull a tgz of an official splunk image and install
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+There are no specific requirements for this role other than internet access on the host you intend to run this on. The host will attempt to use the get_url ansible task to retrieve the splunk installation image.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+The following variables are required and supplied in defaults (as below)
+
+The URL of the wget splunk image page  
+splunk_url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.3&product=splunk&filename=splunk-8.0.3-a6754d8441bf-Linux-x86_64.tgz&wget=true
+
+Splunk will be installed to this path + /splunk - so /opt means install to /opt/splunk  
+splunk_path: /opt
+
+The splunk admin user  
+splunk_user: admin
+
+The splunk admin user password  
+splunk_password: changeme
+
+The user splunk should run as  
+splunk_run_as_user: splunk
+
+The group the splunk user should belong to  
+splunk_run_as_user_group: splunk
+
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+There are no dependencies for this role.
