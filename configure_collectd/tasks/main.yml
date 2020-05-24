@@ -3,8 +3,8 @@
 - name: Ensure selinux allows collectd metrics send to graphite
   command: setsebool -P collectd_tcp_network_connect 1
 
-- name: Rename orig collectd.conf
-  command: mv /etc/collectd.conf /etc/collectd.conf.orig
+#- name: Rename orig collectd.conf
+#  command: mv /etc/collectd.conf /etc/collectd.conf.orig
 
 - name: Push collectd.conf template
   template:

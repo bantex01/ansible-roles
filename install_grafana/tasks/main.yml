@@ -7,7 +7,7 @@
     dest: /etc/yum.repos.d/grafana.repo
     owner: root
     group: root
-    mode: '0775'
+    mode: '0644'
 
 - name: Install grafana with yum
   yum:
