@@ -1,0 +1,20 @@
+---
+# tasks file for install_grafana
+
+- name: Add grafana repo file to yum repo's
+  template:
+    src: "{{ grafana_repo_file }}" 
+    dest: /etc/yum.repos.d/grafana.repo
+    owner: root
+    group: root
+    mode: '0775'
+
+- name: Install grafana with yum
+  yum:
+    name: "{{ grafana_type }}"
+    state: latest
+       
+  notify:
+    Start Grafana 
+
+

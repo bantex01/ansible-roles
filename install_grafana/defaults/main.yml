@@ -1,0 +1,4 @@
+---
+# defaults file for install_grafana
+grafana_repo_file: grafana.repo.oss
+grafana_type: grafana
