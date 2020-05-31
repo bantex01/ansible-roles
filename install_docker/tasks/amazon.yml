@@ -1,0 +1,12 @@
+---
+
+- name: Run yum update
+  yum:
+    name: '*'
+    state: latest
+
+- name: Run amazon-linux extras to install docker
+  command: amazon-linux-extras install -y docker
+  become: yes
+  become_user: root
+

@@ -1,0 +1,10 @@
+---
+- name: Amend /etc perms - This needs changing! 
+  command: chmod 777 /etc
+  become: yes
+  become_user: root
+
+- name: Amend ownership of collectd.conf
+  command: chown ec2-user:ec2-user /etc/collectd.conf
+  become: yes
+  become_user: root

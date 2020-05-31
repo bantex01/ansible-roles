@@ -1,0 +1,5 @@
+---
+
+- name: Ensure selinux allows collectd metrics send to graphite
+  command: setsebool -P collectd_tcp_network_connect 1
+

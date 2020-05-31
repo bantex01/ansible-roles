@@ -1,9 +1,10 @@
 ---
 # tasks file for install_collectd
-- name: Install epel repO
-  yum:
-    name: epel-release.noarch
-    state: latest
+- include: amazon.yml
+  when: ansible_distribution == 'Amazon'
+
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
 
 - name: Install collectd
   yum:

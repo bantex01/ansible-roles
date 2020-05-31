@@ -1,7 +1,11 @@
 ---
 # tasks file for configure_collectd
-- name: Ensure selinux allows collectd metrics send to graphite
-  command: setsebool -P collectd_tcp_network_connect 1
+
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
+
+#- include: amazon.yml
+#  when: ansible_distribution == 'Amazon'
 
 - name: Push collectd.conf template
   template:
@@ -9,6 +13,9 @@
     dest: /etc/collectd.conf
     owner: root
     group: root
-    mode: 0775
+    mode: 0755
 
   notify: Restart collectd 
+
+- name: Flush restart collectd handler
+  meta: flush_handlers  

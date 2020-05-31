@@ -49,6 +49,14 @@
         from_port: 8089
         to_port: 8089
         cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 3000 
+        to_port: 3000 
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 2003 
+        to_port: 2003 
+        cidr_ip: 0.0.0.0/0
 
     rules_egress:
       - proto: all
