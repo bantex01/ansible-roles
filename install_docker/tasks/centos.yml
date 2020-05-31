@@ -1,0 +1,25 @@
+---
+
+- name: Remove old docker installs
+  yum:
+    name: ['docker', 'docker-client', 'docker-client-latest', 'docker-common', 'docker-latest', 'docker-latest-logrotate', 'docker-logrotate', 'docker-engine']
+    state: absent
+
+- name: Install yum-utils
+  yum:
+    name: yum-utils
+    state: latest
+
+- name: Add docker repo
+  get_url:
+    url: "{{ docker_repo }}"
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: Install latest versions of docker-ce and containerd
+  yum:
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+    state: latest
+

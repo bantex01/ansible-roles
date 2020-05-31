@@ -1,0 +1,9 @@
+---
+
+- name: Open ports - we're on RedHat
+  firewalld:
+    port: 80/tcp
+    state: enabled
+    permanent: yes
+    immediate: yes
+ 

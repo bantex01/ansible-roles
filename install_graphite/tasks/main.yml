@@ -1,0 +1,13 @@
+---
+# tasks file for install_graphite
+
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
+
+- name: Build and run graphite container
+  docker_container:
+    name: graphite
+    restart_policy: always
+    network_mode: host
+    image: graphiteapp/graphite-statsd
+

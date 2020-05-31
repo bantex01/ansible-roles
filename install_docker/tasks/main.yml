@@ -1,0 +1,29 @@
+---
+# tasks file for install_docker
+
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
+
+- include: amazon.yml
+  when: ansible_distribution == 'Amazon'
+
+- name: Start docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Get pip install to host (needed for docker mgmt) 
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp/get-pip.py
+
+  notify: Install pip
+
+- name: Flush handler if called
+  meta: flush_handlers
+
+- name: Install needed pip modules (docker-py)
+  pip:
+    name: docker-py
+   

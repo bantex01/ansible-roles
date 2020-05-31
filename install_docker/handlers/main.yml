@@ -1,0 +1,5 @@
+---
+# handlers file for install_docker
+
+- name: Install pip
+  command: python /tmp/get-pip.py 
