@@ -1,0 +1,5 @@
+---
+# defaults file for install_jenkins
+jenkins_repo: https://pkg.jenkins.io/redhat-stable
+jenkins_repo_name: jenkins.repo
+jenkins_key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
