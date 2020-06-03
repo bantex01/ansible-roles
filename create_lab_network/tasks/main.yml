@@ -57,6 +57,10 @@
         from_port: 2003 
         to_port: 2003 
         cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 8080 
+        to_port: 8080 
+        cidr_ip: 0.0.0.0/0
 
     rules_egress:
       - proto: all

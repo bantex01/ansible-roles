@@ -1,6 +1,9 @@
 ---
 # tasks file for install_jenkins
 
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
+
 - name: Install jenkins repo
   yum_repository:
     name: "{{ jenkins_repo_name }}"
@@ -28,13 +31,7 @@
     name: jenkins
     state: started
 
-- name: Open port 8080
-  firewalld:
-    port: 8080/tcp
-    permanent: yes
-    state: enabled
-
-- name: Restart firewalld
-  systemd:
-    name: firewalld
-    state: restarted
+- name: Install git
+  yum:
+    name: git
+    state: latest
