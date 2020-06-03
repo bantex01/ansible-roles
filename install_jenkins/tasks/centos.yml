@@ -1,0 +1,13 @@
+---
+
+- name: Open port 8080
+  firewalld:
+    port: 8080/tcp
+    permanent: yes
+    state: enabled
+
+- name: Restart firewalld
+  systemd:
+    name: firewalld
+    state: restarted
+
